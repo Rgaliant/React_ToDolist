@@ -20,11 +20,20 @@ class App extends Component {
    }
 
    addItem = (name) => {
-    const { todos } = this.state;
-    const todo = { name, id: this.getUniqId() , complete: false }
-    this.setState({ todos: [todo, ...todos] }); 
+    const todo = { id: this.getUniqId, name,  complete: false }
+    this.setState({ todos: [todo, ...this.state.todos] }); 
     }
 
+    handleClick = (id) => {
+      this.setState({
+        todos: this.state.todos.map( todo => {
+          if (todo.id === id) {
+            return { ...todo, complete: !todo.complete,}
+            } 
+            return todo;
+          })
+        })
+      }
 
    renderTodos = () => {
     const { todos, } = this.state
@@ -36,10 +45,12 @@ class App extends Component {
    
 
   render() {
+    const { todos } = this.state;
+
     return (
       <div className="App">
       <h1>ToDo React App</h1>
-        <List name="Todo List" items={this.state.todos} />
+        <List name="Todo List" items={this.state.todos} handleClick={this.handleClick} />
         <TodoForm addItemFunction={this.addItem} />
       </div>
     );
